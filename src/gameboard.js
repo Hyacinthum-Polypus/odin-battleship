@@ -11,6 +11,7 @@ export default function gameBoardFactory() {
         [{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},],
         [{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},],
     ];
+    const misses = [];
 
     function place(x, y, ship, axis) {
         if(x < 0 || x > 9 || y < 0 || y > 9) return "Fail: Ship does not fit on gameboard.";
@@ -42,5 +43,18 @@ export default function gameBoardFactory() {
         return grid[x][y];
     }
 
-    return {place, getSquare}
+    function receiveAttack(x, y) {
+        if(grid[x][y].state != 'none')
+        {
+            grid[x][y].state.hit(grid[x][y].length);
+        } else {
+            addMiss(x, y);
+        }
+    }
+
+    function addMiss(x, y) {
+        misses.push([x, y]);
+    }
+
+    return {place, getSquare, receiveAttack, misses}
 }

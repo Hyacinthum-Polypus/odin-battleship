@@ -37,3 +37,20 @@ test("Ship cannot be placed off the gameboard.", () => {
     expect(gameboard.place(10, 0, ship, 'x')).toBe("Fail: Ship does not fit on gameboard.");
     expect(gameboard.place(4, 8, ship, 'y')).toBe("Fail: Ship does not fit on gameboard.");
 });
+
+test("Attack a ship on the gameboard.", () => {
+    const gameboard = gameBoardFactory();
+    const ship = shipFactory(3);
+    gameboard.place(3, 3, ship, 'x');
+    gameboard.receiveAttack(4, 3);
+    expect(ship.getHull(1)).toBe('hit');
+});
+test("Miss a ship on the gameboard.", () => {
+    const gameboard = gameBoardFactory();
+    const ship = shipFactory(3);
+    gameboard.place(3, 3, ship, 'x');
+    gameboard.receiveAttack(4, 4);
+    gameboard.receiveAttack(4, 3);
+    gameboard.receiveAttack(4, 2);
+    expect(gameboard.misses).toEqual([[4,4],[4,2]]);
+});
