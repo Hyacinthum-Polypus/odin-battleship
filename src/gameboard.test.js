@@ -30,3 +30,10 @@ test("Cannot place one ship ontop of another.", () => {
     expect(gameboard.place(3, 6, ship2, 'x')).toBe("Fail: ship already on square (4, 6)");
     expect(gameboard.getSquare(4, 6).state).toEqual(ship1);
 });
+
+test("Ship cannot be placed off the gameboard.", () => {
+    const gameboard = gameBoardFactory();
+    const ship = shipFactory(3);
+    expect(gameboard.place(10, 0, ship, 'x')).toBe("Fail: Ship does not fit on gameboard.");
+    expect(gameboard.place(4, 8, ship, 'y')).toBe("Fail: Ship does not fit on gameboard.");
+});
