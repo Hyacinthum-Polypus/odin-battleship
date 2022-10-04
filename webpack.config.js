@@ -5,6 +5,10 @@ module.exports = {
     mode: 'development',
     entry: {
         ship: './src/ship.js',
+        gameboard: {
+            import: './src/gameboard.js',
+            dependOn: 'ship'
+        }
     },
     devtool: 'inline-source-map',
     plugins: [
