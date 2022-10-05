@@ -12,6 +12,7 @@ export default function gameBoardFactory() {
         [{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},{state:'none'},],
     ];
     const misses = [];
+    const ships = [];
 
     function place(x, y, ship, axis) {
         if(x < 0 || x > 9 || y < 0 || y > 9) return "Fail: Ship does not fit on gameboard.";
@@ -37,6 +38,7 @@ export default function gameBoardFactory() {
                 }
             break;
         }
+        ships.push(ship);
     }
 
     function getSquare(x, y) {
@@ -56,5 +58,15 @@ export default function gameBoardFactory() {
         misses.push([x, y]);
     }
 
-    return {place, getSquare, receiveAttack, misses}
+    function isAllShipsSunk() {
+        for(let element = 0; element < ships.length; ++element) {
+            const ship = ships[element];
+            if(!ship.isSunk()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    return {place, getSquare, receiveAttack, misses, isAllShipsSunk}
 }

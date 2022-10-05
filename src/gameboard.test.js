@@ -45,6 +45,7 @@ test("Attack a ship on the gameboard.", () => {
     gameboard.receiveAttack(4, 3);
     expect(ship.getHull(1)).toBe('hit');
 });
+
 test("Miss a ship on the gameboard.", () => {
     const gameboard = gameBoardFactory();
     const ship = shipFactory(3);
@@ -53,4 +54,39 @@ test("Miss a ship on the gameboard.", () => {
     gameboard.receiveAttack(4, 3);
     gameboard.receiveAttack(4, 2);
     expect(gameboard.misses).toEqual([[4,4],[4,2]]);
+});
+
+test("Check that all ships are destroyed.", () => {
+    const gameboard = gameBoardFactory();
+    const ship1 = shipFactory(3);
+    const ship2 = shipFactory(5);
+    gameboard.place(2, 2, ship1, 'y');
+    gameboard.place(3, 4, ship2, 'x');
+    gameboard.receiveAttack(2, 2);
+    gameboard.receiveAttack(2, 3);
+    gameboard.receiveAttack(2, 4);
+    gameboard.receiveAttack(3, 4);
+    gameboard.receiveAttack(4, 4);
+    gameboard.receiveAttack(5, 4);
+    gameboard.receiveAttack(6, 4);
+    gameboard.receiveAttack(7, 4);
+    
+    expect(gameboard.isAllShipsSunk()).toBe(true);
+});
+
+test("Check that all ships are not destroyed.", () => {
+    const gameboard = gameBoardFactory();
+    const ship1 = shipFactory(3);
+    const ship2 = shipFactory(5);
+    gameboard.place(2, 2, ship1, 'y');
+    gameboard.place(3, 4, ship2, 'x');
+    gameboard.receiveAttack(2, 2);
+    gameboard.receiveAttack(2, 3);
+    gameboard.receiveAttack(2, 4);
+    gameboard.receiveAttack(3, 4);
+    gameboard.receiveAttack(4, 4);
+    gameboard.receiveAttack(5, 4);
+    gameboard.receiveAttack(6, 4);
+    
+    expect(gameboard.isAllShipsSunk()).toBe(false);
 });
