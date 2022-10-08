@@ -32,12 +32,17 @@ const gameBoardPrototype = {
         if(this.grid[x][y].state != 'none')
         {
             this.grid[x][y].state.hit(this.grid[x][y].length);
+            return "hit";
         } else {
             this.addMiss(x, y);
+            return "miss";
         }
     },
     addMiss(x, y) {
         this.misses.push([x, y]);
+    },
+    isEmpty(x, y) {
+        return this.grid[x][y].state == 'none';
     },
     isAllShipsSunk() {
         for(let element = 0; element < this.ships.length; ++element) {
