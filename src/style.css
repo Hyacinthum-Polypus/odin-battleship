@@ -1,3 +1,37 @@
-.hello {
-    color: red;
+body {
+    display: grid;
+    grid-template-columns: 200px 400px;
+    gap: 10px;
+}
+
+.grid {
+    border: 3px black solid;
+    width: 400px;
+    height: 400px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-column: 2 / 3;
+    grid-row: 2;
+    box-sizing: border-box;
+}
+
+.grid-small {
+    border: 2px black solid;
+    width: 200px;
+    height: 200px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-column: 1;
+    grid-row: 1;
+    box-sizing: border-box;
+}
+
+.square {
+    border: black solid;
+    border-width: inherit;
+    box-sizing: border-box;
+}
+
+.square:hover {
+    background-color: red;
 }
