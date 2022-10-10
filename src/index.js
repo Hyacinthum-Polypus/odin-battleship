@@ -1,4 +1,6 @@
 import './style.css';
+import gameBoardFactory from './gameboard.js';
+import playerFactory from './player.js';
 
 function square(x, y) {
     const square = document.createElement('div');
@@ -30,5 +32,30 @@ function gridSmall() {
     return grid;
 }
 
+function setupGame(p1, p2) {
+
+}
+
+function doRound(p1, p2) {
+
+}
+
+function endGame(p1, p2) {
+
+}
+
+function game() {
+    const player = playerFactory(gameBoardFactory(), null, false);
+    const computer = playerFactory(gameBoardFactory(), null, true);
+
+    setupGame(player, computer);
+
+    while(doRound(player, computer));
+
+    endGame(player, computer);
+}
+
 document.body.appendChild(grid());
 document.body.appendChild(gridSmall());
+
+game();
