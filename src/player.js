@@ -28,6 +28,6 @@ const playerPrototype = {
     },
 }
 
-export default function playerFactory(gameboard, target, isComputer) {
+export default function playerFactory(gameboard, isComputer = false, target = undefined) {
     return Object.assign(Object.create(playerPrototype), {gameboard, target, isComputer});
 }

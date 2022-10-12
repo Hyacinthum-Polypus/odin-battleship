@@ -1,10 +1,10 @@
-body {
+#grids {
     display: grid;
     grid-template-columns: 200px 400px;
     gap: 10px;
 }
 
-.grid {
+#grid {
     border: 3px black solid;
     width: 400px;
     height: 400px;
@@ -15,7 +15,7 @@ body {
     box-sizing: border-box;
 }
 
-.grid-small {
+#grid-small {
     border: 2px black solid;
     width: 200px;
     height: 200px;
@@ -30,8 +30,28 @@ body {
     border: black solid;
     border-width: inherit;
     box-sizing: border-box;
+    display: flex;
+
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ship {
+    height: 50%;
+    width: 50%;
+    background-color: greenyellow;
+}
+
+.damaged {
+    background-color: blueviolet;
 }
 
 .square:hover {
     background-color: red;
+}
+
+#axis-frame {
+    display: 'flex';
+    flex-direction: 'column';
 }
