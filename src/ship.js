@@ -1,4 +1,4 @@
-const shipPrototype = {
+export const shipPrototype = {
     hit(pos) {
         if(pos < 0 || pos >= this.length) {
             return 'miss';

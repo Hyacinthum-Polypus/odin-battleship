@@ -1,5 +1,13 @@
+import {shipPrototype} from './ship.js'
+import shipFactory from './ship.js';
+
 const gameBoardPrototype = {
     place(x, y, ship, axis) {
+        if(!isNaN(ship)) {
+            ship = shipFactory(ship);
+        } else if(!shipPrototype.isPrototypeOf(ship)) {
+            return "Fail: Bad ship type.";
+        }
         if(x < 0 || x > 9 || y < 0 || y > 9) return "Fail: Ship does not fit on gameboard.";
         switch(axis) {
             case 'x':
