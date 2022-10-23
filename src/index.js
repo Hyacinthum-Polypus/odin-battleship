@@ -61,10 +61,11 @@ function switchAxis(axisState) {
 }
 
 function clickSquare(click) {
+    const x = Number(this.getAttribute("data-x")), y = this.getAttribute("data-y");
     switch(this.parentNode.getAttribute("data-grid")) {
         case "placement":
             if(state == "setup") {
-                if(player.gameboard.place(Number(this.getAttribute('data-x')), Number(this.getAttribute('data-y')), playersShips[0], axis)) {
+                if(player.gameboard.place(x, y, playersShips[0], axis)) {
 
                 } else {
                     playersShips.shift();
@@ -74,16 +75,38 @@ function clickSquare(click) {
 
                 if(playersShips.length == 0) {
                     computer.setup(computerShips);
-                    state = "turn";
+                    state = "playerTurn";
                     status.textContent = "It is your turn. Select free square on target board.";
                     display(targetGrid, computer.gameboard, false);
                 }
             }
         break;
         case "target":
-            if(state == "turn") {
-                player.sendAttack(Number(this.getAttribute("data-x")), Number(this.getAttribute("data-y")));
-                display(targetGrid, computer.gameboard, false);
+            if(state == "playerTurn") {
+                const result = player.sendAttack(x, y);
+                if(result) {
+                    display(targetGrid, computer.gameboard, false);
+                    console.log(result);
+                    status.textContent = `${result == "hit" ? player.target.gameboard.getSquare(x, y).state.isSunk() ? "You sunk my battleship! " : "" : ""}Computer's turn. Please wait.`;
+                    state = "computerTurn";
+                    if(computer.gameboard.isAllShipsSunk()) {
+                        state = "gameover";
+                        status.textContent = "You won!";
+                        return;
+                    }
+
+                    setTimeout(() => {
+                        computer.computeAttack();
+                        display(placementGrid, player.gameboard);
+                        status.textContent = "It is your turn. Select free square on target board.";
+                        state = "playerTurn";
+                        if(player.gameboard.isAllShipsSunk()) {
+                            state = "gameover";
+                            status.textContent = "You lose!";
+                            return;
+                        }
+                    }, 1000);
+                }
             }
         break;
     }
