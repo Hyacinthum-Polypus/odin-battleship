@@ -40,7 +40,7 @@ const gameBoardPrototype = {
         return this.misses.some(coord => {
             if(coord[0] == x && coord[1] == y) return true;
         });
-    ,}
+    },
     receiveAttack(x, y) {
         if(this.grid[x][y].state != 'none')
         {
