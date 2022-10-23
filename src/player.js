@@ -10,14 +10,12 @@ const playerPrototype = {
         {
             x = Math.floor(Math.random() * 10);
             y = Math.floor(Math.random() * 10);
-        } while(this.legalMove(x, y))
+        } while(this.illegalMove(x, y))
 
         return this.sendAttack(x, y);
     },
-    legalMove(x, y) { 
-        const notPrevMissed = this.target.gameboard.misses.some(coord => {
-            if(coord[0] == x && coord[1] == y) return true;
-        });
+    illegalMove(x, y) { 
+        const notPrevMissed = this.target.gameboard.hasMissed(x, y);
         if(this.target.gameboard.isEmpty(x, y)) {
             return notPrevMissed;
         } else {
@@ -25,6 +23,8 @@ const playerPrototype = {
         }
     },
     sendAttack(x, y) {
+        console.log(x, y);
+        if(!this.illegalMove(x, y))
         return this.target.gameboard.receiveAttack(x, y);
     },
     setup(ships) {
