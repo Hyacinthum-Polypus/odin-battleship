@@ -37,14 +37,21 @@
     justify-content: center;
 }
 
-.ship {
+.square-child {
     height: 50%;
     width: 50%;
+}
+
+.ship {
     background-color: greenyellow;
 }
 
 .damaged {
     background-color: blueviolet;
+}
+
+.missed {
+    background-color: grey;
 }
 
 .square:hover {

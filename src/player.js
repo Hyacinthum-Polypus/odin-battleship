@@ -23,7 +23,6 @@ const playerPrototype = {
         }
     },
     sendAttack(x, y) {
-        console.log(x, y);
         if(!this.illegalMove(x, y))
         return this.target.gameboard.receiveAttack(x, y);
     },

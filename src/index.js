@@ -1,7 +1,6 @@
 import './style.css';
 import gameBoardFactory from './gameboard.js';
 import playerFactory from './player.js';
-import shipFactory from './ship.js';
 
 function square(x, y) {
     const square = document.createElement('div');
@@ -62,19 +61,30 @@ function switchAxis(axisState) {
 }
 
 function clickSquare(click) {
-    switch(click.target.parentNode.getAttribute("data-grid")) {
+    switch(this.parentNode.getAttribute("data-grid")) {
         case "placement":
-            if(state = "setup") {
-                if(player.gameboard.place(Number(this.getAttribute('data-x')), Number(this.getAttribute('data-y')), shipFactory(ships[0]), axis)) {
+            if(state == "setup") {
+                if(player.gameboard.place(Number(this.getAttribute('data-x')), Number(this.getAttribute('data-y')), playersShips[0], axis)) {
 
                 } else {
-                    ships.shift();
+                    playersShips.shift();
                 }
                 display(placementGrid, player.gameboard);
+                status.textContent = `Place remaining ships on placement board. [${playersShips}]`;
+
+                if(playersShips.length == 0) {
+                    computer.setup(computerShips);
+                    state = "turn";
+                    status.textContent = "It is your turn. Select free square on target board.";
+                    display(targetGrid, computer.gameboard);
+                }
             }
         break;
         case "target":
-
+            if(state == "turn") {
+                player.sendAttack(Number(this.getAttribute("data-x")), Number(this.getAttribute("data-y")));
+                display(targetGrid, computer.gameboard);
+            }
         break;
     }
 }
@@ -92,16 +102,18 @@ function display(grid, gameboard) {
     Array.from(grid.children).forEach(square => {
         const x = Number(square.getAttribute("data-x"));
         const y = Number(square.getAttribute("data-y"));
+        const child = document.createElement('div');
+        child.classList.add('square-child');
+        square.appendChild(child);
         if(!gameboard.isEmpty(x, y)) {
             if(gameboard.getSquare(x, y).state.getHull(gameboard.getSquare(x, y).length) == 'hit') {
-                const damagedHull = document.createElement('div');
-                damagedHull.classList.add('ship');
-                damagedHull.classList.add('damaged');
-                square.appendChild(damagedHull);
+                child.classList.add('damaged');
             } else {
-                const hull = document.createElement('div');
-                hull.classList.add('ship');
-                square.appendChild(hull);
+                child.classList.add('ship');
+            }
+        } else {
+            if(gameboard.hasMissed(x, y)) {
+                child.classList.add('missed');
             }
         }
     })
@@ -109,10 +121,14 @@ function display(grid, gameboard) {
 
 
 let state = "setup";
-const ships = [5, 4, 4, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2];
+const playersShips = [5, 4, 4, 3, 3, 3, 3, 2, 2];
+const computerShips = [5, 4, 4, 3, 3, 3, 3, 2, 2];
 let axis = 'x';
 const player = playerFactory(gameBoardFactory(), false);
 const computer = playerFactory(gameBoardFactory(), true);
+
+player.target = computer;
+computer.target = player;
 
 const grids = document.createElement('div');
 grids.id = 'grids'
@@ -126,4 +142,6 @@ grids.appendChild(targetGrid);
 document.body.appendChild(axisButton());
 
 const status = document.createElement('h3');
+status.id = "status";
+status.textContent = `Place remaining ships on placement board. [${playersShips}]`;
 document.body.appendChild(status);
