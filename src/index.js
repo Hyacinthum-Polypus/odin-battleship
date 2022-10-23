@@ -76,14 +76,14 @@ function clickSquare(click) {
                     computer.setup(computerShips);
                     state = "turn";
                     status.textContent = "It is your turn. Select free square on target board.";
-                    display(targetGrid, computer.gameboard);
+                    display(targetGrid, computer.gameboard, false);
                 }
             }
         break;
         case "target":
             if(state == "turn") {
                 player.sendAttack(Number(this.getAttribute("data-x")), Number(this.getAttribute("data-y")));
-                display(targetGrid, computer.gameboard);
+                display(targetGrid, computer.gameboard, false);
             }
         break;
     }
@@ -97,7 +97,7 @@ function clear(grid) {
     });
 }
 
-function display(grid, gameboard) {
+function display(grid, gameboard, displayShips = true) {
     clear(grid);
     Array.from(grid.children).forEach(square => {
         const x = Number(square.getAttribute("data-x"));
@@ -108,7 +108,7 @@ function display(grid, gameboard) {
         if(!gameboard.isEmpty(x, y)) {
             if(gameboard.getSquare(x, y).state.getHull(gameboard.getSquare(x, y).length) == 'hit') {
                 child.classList.add('damaged');
-            } else {
+            } else if(displayShips) {
                 child.classList.add('ship');
             }
         } else {
