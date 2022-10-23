@@ -6,13 +6,31 @@ const playerPrototype = {
     },
     computeAttack() {
         let x, y;
-        do
-        {
-            x = Math.floor(Math.random() * 10);
-            y = Math.floor(Math.random() * 10);
-        } while(this.illegalMove(x, y))
+        if(this.priorityAttacks.length > 0) {
+            x = this.priorityAttacks[0].x;
+            y = this.priorityAttacks[0].y;
+            this.priorityAttacks.shift();
+        } else {
+            do
+            {
+                x = Math.floor(Math.random() * 10);
+                y = Math.floor(Math.random() * 10);
+            } while(this.illegalMove(x, y)) 
+        }
 
-        return this.sendAttack(x, y);
+        const result = this.sendAttack(x, y);
+        if(result == 'hit') {
+            if(!this.illegalMove(x+1, y))
+            this.priorityAttacks.push({x:x+1, y:y})
+            if(!this.illegalMove(x-1, y))
+            this.priorityAttacks.push({x:x-1, y:y})
+            if(!this.illegalMove(x, y+1))
+            this.priorityAttacks.push({x:x, y:y+1})
+            if(!this.illegalMove(x, y-1))
+            this.priorityAttacks.push({x:x, y:y-1})
+        }
+
+        return result;
     },
     illegalMove(x, y) { 
         const notPrevMissed = this.target.gameboard.hasMissed(x, y);
@@ -40,5 +58,6 @@ const playerPrototype = {
 }
 
 export default function playerFactory(gameboard, isComputer = false, target = undefined) {
-    return Object.assign(Object.create(playerPrototype), {gameboard, target, isComputer});
+    const priorityAttacks = [];
+    return Object.assign(Object.create(playerPrototype), {gameboard, target, priorityAttacks});
 }
